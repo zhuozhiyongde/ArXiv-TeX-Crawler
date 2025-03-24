@@ -16,6 +16,7 @@ ArXiv-TeX-Crawler 是一个用于从 arXiv.org 下载和提取论文 TeX 源代�
 ```
 OPENAI_API_KEY=你的OpenAI_API密钥
 OPENAI_BASE_URL=https://api.openai.com/v1  # 可选，用于自定义API地址
+CUSTOM_END_PROMPT=你的自定义结束提示 # 可选
 ```
 
 ## 🚀 使用方法

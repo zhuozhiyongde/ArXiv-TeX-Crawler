@@ -185,7 +185,7 @@ class ArXivCrawler:
             # 5. 保存到根目录
             output_path = f"{arxiv_id}.tex"
             with open(output_path, "w", encoding="utf-8") as f:
-                if os.environ.get("CUSTOM_END_PROMPT"):
+                if os.environ.get("CUSTOM_END_PROMPT", None):
                     self.output_content.append(os.environ.get("CUSTOM_END_PROMPT"))
                 f.writelines(self.output_content)
 
