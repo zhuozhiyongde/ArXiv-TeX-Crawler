@@ -185,9 +185,8 @@ class ArXivCrawler:
             # 5. 保存到根目录
             output_path = f"{arxiv_id}.tex"
             with open(output_path, "w", encoding="utf-8") as f:
-                self.output_content.append(
-                    "详细讲解本文内容，解释所有重点公式符号含义，给出通俗的解释与深刻的洞见。你需要关注：文章要解决什么问题(Why) / insight / 有意思的表述 / 模型架构（采用了什么 backbone，token 序列如何构造，如何处理，监督信号是什么（$\mathcal\{L\}$），用了什么优化方法与结构，训练是否分阶段进行，若分了都在干什么）"
-                )
+                if os.environ.get("CUSTOM_END_PROMPT"):
+                    self.output_content.append(os.environ.get("CUSTOM_END_PROMPT"))
                 f.writelines(self.output_content)
 
             return output_path
