@@ -142,10 +142,32 @@ class ArXivCrawler:
 
         # 4. 按文件系统顺序合并内容
         self.output_content = []
-        for tex_file, content in sorted(filtered_tex_files, key=lambda x: str(x[0])):
+        self.output_seq = [tex_file.name for tex_file in self.tex_files]
+        # print("输出顺序: ", self.output_seq)
+        # 使用 OpenAI 模型对输出顺序进行排序
+        response = self.client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "你是学术论文章节排序助手，请根据论文的逻辑顺序，对以下章节进行排序。",
+                },
+                {
+                    "role": "user",
+                    "content": str(self.output_seq)
+                    + "\n请仅输出最终的排序结果，不要输出任何解释。",
+                },
+            ],
+        )
+        seq_str = response.choices[0].message.content.strip()
+        print("排序结果: ", seq_str)
+        # 根据 tex_file.name 在 seq_str 中的顺序，对 filtered_tex_files 进行排序
+        for tex_file, content in sorted(
+            filtered_tex_files, key=lambda x: seq_str.index(x[0].name)
+        ):
+            print("当前文件: ", tex_file.name)
             self.output_content.append(f"% 源文件: {tex_file.name}\n")
             self.output_content.append(content)
-            self.output_content.append("\n\n")
 
         # 如果没有找到有价值的内容，抛出异常
         if not self.output_content:
@@ -163,6 +185,9 @@ class ArXivCrawler:
             # 5. 保存到根目录
             output_path = f"{arxiv_id}.tex"
             with open(output_path, "w", encoding="utf-8") as f:
+                self.output_content.append(
+                    "详细讲解本文内容，解释所有重点公式符号含义，给出通俗的解释与深刻的洞见。你需要关注：文章要解决什么问题(Why) / insight / 有意思的表述 / 模型架构（采用了什么 backbone，token 序列如何构造，如何处理，监督信号是什么（$\mathcal\{L\}$），用了什么优化方法与结构，训练是否分阶段进行，若分了都在干什么）"
+                )
                 f.writelines(self.output_content)
 
             return output_path

@@ -22,10 +22,10 @@ OPENAI_BASE_URL=https://api.openai.com/v1  # 可选，用于自定义API地址
 
 ```bash
 # 基本用法
-python main.py --arxiv_id "1706.03762"
+python main.py --id "1706.03762"
 
 # 使用URL（会自动提取ID）
-python main.py --arxiv_id "https://arxiv.org/abs/1706.03762"
+python main.py --id "https://arxiv.org/abs/1706.03762"
 ```
 
 输出会保存在根目录。

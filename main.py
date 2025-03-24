@@ -19,21 +19,21 @@ load_dotenv()
 def main():
     parser = argparse.ArgumentParser(description="ArXiv TeX Crawler Test")
     parser.add_argument(
-        "--arxiv_id",
+        "--id",
         type=str,
         default="1706.03762",
         help="arXiv article ID (e.g. 1706.03762)",
     )
     args = parser.parse_args()
 
-    if "http" in args.arxiv_id:
-        args.arxiv_id = args.arxiv_id.split("/")[-1]
+    if "http" in args.id:
+        args.id = args.id.split("/")[-1]
 
-    print(f"正在处理 arXiv ID: {args.arxiv_id}")
+    print(f"正在处理 arXiv ID: {args.id}")
     crawler = ArXivCrawler()
 
     try:
-        result = crawler.process(args.arxiv_id)
+        result = crawler.process(args.id)
         if result:
             print(f"成功生成文件: {result}")
             # print("文件内容结构验证：")
