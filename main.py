@@ -21,19 +21,22 @@ def main():
     parser.add_argument(
         "--id",
         type=str,
-        default="1706.03762",
         help="arXiv article ID (e.g. 1706.03762)",
     )
     args = parser.parse_args()
 
-    if "http" in args.id:
-        args.id = args.id.split("/")[-1]
+    arxiv_id = args.id
+    if not arxiv_id:
+        arxiv_id = input("请输入 arXiv ID (例如: 1706.03762): ").strip()
 
-    print(f"正在处理 arXiv ID: {args.id}")
+    if "http" in arxiv_id:
+        arxiv_id = arxiv_id.split("/")[-1]
+
+    print(f"正在处理 arXiv ID: {arxiv_id}")
     crawler = ArXivCrawler()
 
     try:
-        result = crawler.process(args.id)
+        result = crawler.process(arxiv_id)
         if result:
             print(f"成功生成文件: {result}")
             # print("文件内容结构验证：")
